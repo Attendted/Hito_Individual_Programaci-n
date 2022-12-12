@@ -1,0 +1,152 @@
+import pprint
+#Ahora procederemos a realizar una biblioteca donde extraeremos más adelante la información
+zapatillas={'Nike air Jordan retro 1':150, 'Adidas Ozwigoo v1':80, 'Adidas Ozwigoo v2':95, 'Nike AirForce':115, 'New Balance':80, 'Nike Presto':110, 'Nike Presto Halloween':160}
+
+class Registro:
+    def __init__(self, nombre,apellidos,edad,telefono,direccion,email): #Creamos un formulario mediante una definición __init__
+        #seguidamente damos un valor:
+        self.nombre=nombre
+        self.apellidos=apellidos
+        self.edad=edad
+        self.telefono=telefono
+        self.direccion=direccion
+        self.email=email
+        print('Para poder realizar un pedido debe de registrarse:')
+    def registro(self): #Con esto podremos crear un "Formulario"
+        print('Revise que esten sus datos correctamente:')
+        print(f'Nombre: {self.nombre} \nApellidos: {self.apellidos} \nEdad: {self.edad} \nTelefono: {self.telefono} \nDirección: {self.direccion} \nEmail: {self.email}')
+        #Ceamos una función para que pueda confirmar o no
+        confirmar=input('¿Están bien?')
+
+        while confirmar.lower()!='si':
+            print('Cambie los datos')
+            Cliente1=Registro(input('Nombre:'),input('Apellidos:'),input('Edad:'),input('Telefono:'),input('Dirección'),input('Email:'))
+            print('Confirme que vuelva a estar bien:')
+            print(f'Nombre: {self.nombre} \nApellidos: {self.apellidos} \nEdad: {self.edad} \nTelefono: {self.telefono} \nDirección: {self.direccion} \nEmail: {self.email}')
+            confirmar=input('¿Están bien?')
+
+        print(f'Continua con la compra {self.nombre}')
+
+#creamos el registro del cliente
+Cliente1=Registro(input('Nombre: '),input('Apellidos: '),input('Edad: '),input('Telefono: '),input('Direccicón: '),input('Email: '))
+Cliente1.registro()
+
+pprint.pprint(zapatillas)
+
+#Ahora podremos crear con los siguientes lineas, unas listas vacias donde se podrán almacenar los productos
+Cesta={}
+Favoritos={}
+
+#Con la siguiente función podremso guardar los productos que seleccionemos:
+def producto():
+    try:
+        NombreP=input('Elige el producto:')
+        print()
+        Agregar=float(input(f'Quieres agregar {NombreP} a la cesta (1) o a favoritos (2) :'))
+        if Agregar == 1:
+            Cesta[NombreP] = zapatillas[NombreP]
+            print(f'Cesta: {Cesta}')
+            #Sumar el IVA
+            print(f'Total: {sum(Cesta.values())}')
+        elif Agregar == 2:
+            Favoritos[NombreP] = zapatillas[NombreP]
+            print(f'Favoritos: {Favoritos}')
+            #Sumamos el IVA
+            print(f'Total: {sum(Favoritos.values())}')
+        elif Agregar >= 3:
+            print('Introduce una opción')
+    except:
+        print('Has introducido mal el producto, porfavor ponlo tal cual está en la lista')
+
+producto()
+
+def scompra():
+    print()
+    ContinuarCompra=input(f'Quieres continuar comprandor\n')
+    #Deberemos de generar un print con un input para que podamos dar una respuesta
+    if ContinuarCompra.lower() == 'si':
+        pprint.pprint(zapatillas)
+        producto()
+        scompra()
+    #Si no queremos continuar deberemos de mover los productos a algún lado:
+    elif ContinuarCompra.lower() == 'no':
+        print('Debes de mover los productos a la Cesta o Favoritos')
+        cambio=float(input('¿Quieres añadir los productos a la cesta o a favoritos? SI(1) o NO(2)'))
+        match cambio:
+            case 1:
+                pprint.pprint(Favoritos)
+                cambio1=input('Añade los productos a la cesta: \n')
+                Cesta[cambio1] = zapatillas[cambio1]
+                print(f'Cesta: {Cesta}')
+                print(f'Total: {sum(Cesta.values())}')
+
+            case 2:
+                print('Procedes con el pago: ')
+    else:
+        print('Si o No')
+        scompra()
+scompra()
+
+def Pagar():
+    Pais=input('¿De que país eres?\n')
+    if Pais.lower() == 'españa':
+        print('El IVA de España es 21%')
+        print(f'El total con el IVA añadidó será: {sum(Cesta.values())*1.21}€')
+    else:
+        print('Has selecciona un país con el IVA internacional que es del 15%')
+        print(f'El total con IVA es de: {sum(Cesta.values())*1.15}€')
+
+    print()
+    print('Debes de seleccionar la opción de pago')
+    FormaPago=int(input('1/ Pago con Tarjeta 2/Paypal:'))
+    match FormaPago:
+        #Opcion pagar con Tarjeta
+        case 1:
+            print('Has decidido pagar con tarjeta, introduce los datos:')
+            NumeroTarjeta=input('Numero de Tarjeta: ')
+            FechaCaducidad=input('Fecha de caducidad: ')
+            CVV=input('CVV: ')
+            print(f'Numero de tarjeta: {NumeroTarjeta}\n Fecha de Caducidad: {FechaCaducidad}\n CVV: {CVV}\n')
+            ConfirmarTarjeta=input('¿Estan bien?')
+            while ConfirmarTarjeta.lower() != 'si':
+                NumeroTarjeta = input('Numero de Tarjeta: ')
+                FechaCaducidad = input('Fecha de caducidad: ')
+                CVV = input('CVV: ')
+                print(f'Numero de tarjeta: {NumeroTarjeta}\n Fecha de Caducidad: {FechaCaducidad}\n CVV: {CVV}\n')
+                ConfirmarTarjeta = input('¿Estan bien?')
+            Factura=input('Quiere que le enviemos la factura por Email o SMS\n')
+            while Factura.lower() != 'email' or 'sms':
+                print('Opción Incorrecta')
+            if Factura.lower() == 'email':
+                print('La factura ha sido enviada al correo')
+            if Factura.lower() == 'sms:' :
+                print('La factura ha sido enviada por sms')
+            else:
+                try:
+                    print('Opción incorrecta, Rinicia el programa')
+                    #Opcion pagar con Paypal
+                except:
+                    print('Error Fatal.')
+        case 2:
+            print('Inicia Sesión con Paypal:')
+            Correo=input('Correo Electrónico: ')
+            Contraseña=input('Cntraseña: ')
+            print(f'Correo: {Correo} Contraseña: {Contraseña}')
+            Confirmar2=input('¿Los datos son correctos:?')
+            while Confirmar2.lower() != 'si':
+                print('Rellene de nuevo los datos:')
+                Correo = input('Correo Electrónico: ')
+                Contraseña = input('Cntraseña: ')
+                print(f'Correo: {Correo} Contraseña: {Contraseña}')
+                Confirmar2 = input('¿Los datos son correctos:?')
+            Factura1 = input('¿Quiere que le enviemos la factura por Email o SMS?\n')
+            while Factura1.lower() != 'email' or 'sms':
+                print('Opción Incorrecta')
+                if Factura1.lower() == 'email':
+                    print('La factura ha sido enviada al correo')
+                if Factura1.lower() == 'sms:':
+                    print('La factura ha sido enviada por sms')
+                else:
+                    print('Opción incorrecta, Rinicia el programa')
+
+Pagar()
